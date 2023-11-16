@@ -1,9 +1,9 @@
 import pygame
-
+from game_parameters import *
 pygame.init()
 
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
+#SCREEN_WIDTH = 800
+#SCREEN_HEIGHT = 600
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Spritesheets")
@@ -26,7 +26,7 @@ def get_image(sheet, frame_x, frame_y, width, height):
 frame = get_image(sprite_sheet_image, 0, 0, 64, 64)
 
 
-run = True
+run = False
 
 while run:
 
