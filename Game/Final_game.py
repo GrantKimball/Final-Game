@@ -1,18 +1,19 @@
 import pygame
 import sys
-from background import draw_background
+from background import draw_background, add_football
 from game_parameters import *
 from player import Player
+from football import *
 
 #initalizing the game
 pygame.init()
 
-#initialize clock
+#initialize clock object
 clock=pygame.time.Clock()
 
 #should create screen
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption('Just a field with a guy')
+pygame.display.set_caption('Field, guy, ball')
 
 # import sprite sheet
 sprite_sheet_image = pygame.image.load('groundGrass_mown.png').convert()
@@ -20,6 +21,9 @@ sprite_sheet_image = pygame.image.load('groundGrass_mown.png').convert()
 image = pygame.Surface((64, 64)).convert()
 #puts an image onto the surface above
 image.blit(sprite_sheet_image, (0, 0), (0, 0, 64, 64))
+
+#draw footballs
+add_football(5)
 
 #creating a player at a certain spot
 player = Player(SCREEN_WIDTH/1.2,SCREEN_HEIGHT/1.2)
@@ -48,13 +52,37 @@ while running:
     screen.blit(background, (0,0))
     #updates player
     player.update()
+    #updates the footballs position and visibility
+    footballs.update()
+
+    #check to see if the player touches football
+    result = pygame.sprite.spritecollide(player, footballs, True)
+    if result:
+    #    pygame.mixer.Sound.play(chomp)
+    #    score += len(result)
+        add_football(len(result))
+
+    #check to see if the balls are off the screen
+    for ball in footballs:
+        if ball.y >= ball.rect.height: #aight this is messin something up
+            footballs.remove(ball)#remove football from sprite group
+            add_football(1)
+
+    #draw player
     player.draw(screen)
+
+    #draw the sprites on the screen(flip ACTUALLY does it but this will tell them where to go)
+    footballs.draw(screen)
+
     #continuously shows the updated screen
     pygame.display.flip()
+
 
     clock.tick(60)
 
 
+#screen.blit(background, (0,0))
+pygame.display.flip()
 
 while True:
     for event in pygame.event.get():
