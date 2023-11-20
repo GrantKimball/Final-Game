@@ -7,7 +7,7 @@ class Football(pygame.sprite.Sprite):
         super().__init__()
         self.image=pygame.image.load('ball_football.png').convert()
         self.image.set_colorkey((0,0,0))
-        #self.image=pygame.transform.flip(self.image, True, False)
+        self.image=pygame.transform.scale(self.image, (30,30))
         self.rect=self.image.get_rect()
         self.x=x
         self.y=y

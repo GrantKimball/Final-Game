@@ -13,7 +13,7 @@ clock=pygame.time.Clock()
 
 #should create screen
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption('Field, guy, ball')
+pygame.display.set_caption('Field, guy, balls')
 
 # import sprite sheet
 sprite_sheet_image = pygame.image.load('groundGrass_mown.png').convert()
@@ -27,6 +27,10 @@ add_football(5)
 
 #creating a player at a certain spot
 player = Player(SCREEN_WIDTH/1.2,SCREEN_HEIGHT/1.2)
+
+#init score
+score=0
+score_font= pygame.font.Font("DragonHunter-9Ynxj.otf", 50)
 
 #draw the initial background/make a copy of it
 running = True
@@ -59,12 +63,12 @@ while running:
     result = pygame.sprite.spritecollide(player, footballs, True)
     if result:
     #    pygame.mixer.Sound.play(chomp)
-    #    score += len(result)
+        score += len(result)
         add_football(len(result))
 
     #check to see if the balls are off the screen
     for ball in footballs:
-        if ball.y >= ball.rect.height: #aight this is messin something up
+        if ball.rect.y >= SCREEN_HEIGHT:
             footballs.remove(ball)#remove football from sprite group
             add_football(1)
 
@@ -73,6 +77,10 @@ while running:
 
     #draw the sprites on the screen(flip ACTUALLY does it but this will tell them where to go)
     footballs.draw(screen)
+
+    #draw/update the score
+    text = score_font.render(f'{score}', True, (255, 0, 0))
+    screen.blit(text, (SCREEN_WIDTH - TILE_SIZE, 28))
 
     #continuously shows the updated screen
     pygame.display.flip()
