@@ -61,6 +61,7 @@ while running and lives>0:
         if event.type == pygame.QUIT:
             running = False
         player.stop()
+        #allows you to move left and right
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
                 print('pressed key left')
@@ -110,9 +111,18 @@ while running and lives>0:
 
     clock.tick(60)
 
+#after you lose
+
+#want to play only this music once you lose
+pygame.mixer.Sound.stop(game_music)
+pygame.mixer.Sound.play(end_music)
 
 #screen.blit(background, (0,0))
 pygame.display.flip()
+
+#add a restart option (mouse down function)
+
+#pygame.quit()    this would make the game exit out
 
 while True:
     for event in pygame.event.get():
@@ -120,6 +130,5 @@ while True:
             pygame.quit()
             sys.exit()
 
-#pygame.quit()
 
 
