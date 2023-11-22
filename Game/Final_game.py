@@ -46,6 +46,7 @@ catch_sound=pygame.mixer.Sound("Oh Yeah sound Effect.mp3")
 game_music=pygame.mixer.Sound("2019-12-11_-_Retro_Platforming_-_David_Fesliyan.mp3")
 hard_music=pygame.mixer.Sound("2021-08-30_-_Boss_Time_-_www.FesliyanStudios.com.mp3")
 no_catch=pygame.mixer.Sound("Loud WHAAAAAAAAAAAAAAT sound effect.mp3")
+end_music=pygame.mixer.Sound("Shutoku Mukai - Dandy in Love.mp3")
 
 #play theme song
 pygame.mixer.Sound.play(game_music)
