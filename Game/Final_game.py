@@ -13,7 +13,7 @@ clock=pygame.time.Clock()
 
 #should create screen
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption('Field, guy, balls')
+pygame.display.set_caption('Field, guy, balls, music')
 
 # import sprite sheet
 sprite_sheet_image = pygame.image.load('groundGrass_mown.png').convert()
@@ -30,16 +30,31 @@ player = Player(SCREEN_WIDTH/1.2,SCREEN_HEIGHT/1.2)
 
 #init score
 score=0
-score_font= pygame.font.Font("DragonHunter-9Ynxj.otf", 50)
+score_font= pygame.font.Font("DragonHunter-9Ynxj.otf", 33)
+
+#set number of lives
+lives=3
+lives_font= pygame.font.Font("DragonHunter-9Ynxj.otf", 33)
 
 #draw the initial background/make a copy of it
 running = True
 background = screen.copy()
 draw_background(background, image)
 
+#load sound effects
+catch_sound=pygame.mixer.Sound("Oh Yeah sound Effect.mp3")
+game_music=pygame.mixer.Sound("2019-12-11_-_Retro_Platforming_-_David_Fesliyan.mp3")
+hard_music=pygame.mixer.Sound("2021-08-30_-_Boss_Time_-_www.FesliyanStudios.com.mp3")
+no_catch=pygame.mixer.Sound("Loud WHAAAAAAAAAAAAAAT sound effect.mp3")
+
+#play theme song
+pygame.mixer.Sound.play(game_music)
 
 
-while running:
+#andre helping hand when I do the welcome screen
+
+
+while running and lives>0:
     #lets the player leave when they want
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -62,7 +77,7 @@ while running:
     #check to see if the player touches football
     result = pygame.sprite.spritecollide(player, footballs, True)
     if result:
-    #    pygame.mixer.Sound.play(chomp)
+        pygame.mixer.Sound.play(catch_sound)
         score += len(result)
         add_football(len(result))
 
@@ -70,6 +85,8 @@ while running:
     for ball in footballs:
         if ball.rect.y >= SCREEN_HEIGHT:
             footballs.remove(ball)#remove football from sprite group
+            pygame.mixer.Sound.play(no_catch)
+            lives=lives-1
             add_football(1)
 
     #draw player
@@ -79,8 +96,12 @@ while running:
     footballs.draw(screen)
 
     #draw/update the score
-    text = score_font.render(f'{score}', True, (255, 0, 0))
-    screen.blit(text, (SCREEN_WIDTH - TILE_SIZE, 28))
+    text = score_font.render(f'Score : {score}', True, (255, 0, 0))
+    screen.blit(text, (SCREEN_WIDTH - 178, 32))
+
+    #lives
+    lives_text=lives_font.render(f'Lives : {lives}', True, (255,0,0))
+    screen.blit(lives_text, (23, 32))
 
     #continuously shows the updated screen
     pygame.display.flip()
