@@ -36,6 +36,9 @@ score_font= pygame.font.Font("DragonHunter-9Ynxj.otf", 33)
 lives=3
 lives_font= pygame.font.Font("DragonHunter-9Ynxj.otf", 33)
 
+#restart font
+restart_font=pygame.font.Font("DragonHunter-9Ynxj.otf", 75)
+
 #draw the initial background/make a copy of it
 running = True
 background = screen.copy()
@@ -116,6 +119,17 @@ while running and lives>0:
 #want to play only this music once you lose
 pygame.mixer.Sound.stop(game_music)
 pygame.mixer.Sound.play(end_music)
+
+#display restart option
+restart_text=restart_font.render(f'RESTART', True, (255,0,0))
+screen.blit(restart_text, ((SCREEN_WIDTH/2)-160, SCREEN_HEIGHT/2))
+clickable_rect = pygame.Rect(600, 200, 350, 150)
+for event in pygame.event.get():
+    if event.type == pygame.MOUSEBUTTONDOWN:
+        if event.button == 1:  # Left mouse button
+            mouse_x, mouse_y = pygame.mouse.get_pos()
+            if clickable_rect.collidepoint(mouse_x, mouse_y):
+                pygame.init()
 
 #screen.blit(background, (0,0))
 pygame.display.flip()
