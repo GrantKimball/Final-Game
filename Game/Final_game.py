@@ -56,8 +56,6 @@ pygame.mixer.Sound.play(game_music)
 
 
 #andre helping hand when I do the welcome screen
-
-
 while running and lives>0:
     #lets the player leave when they want
     for event in pygame.event.get():
