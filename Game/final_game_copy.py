@@ -30,6 +30,9 @@ add_football(5)
 player1 = Player1(SCREEN_WIDTH/1.2,SCREEN_HEIGHT/1.2)
 player2 = Player2(SCREEN_WIDTH/6.1,SCREEN_HEIGHT/1.2)
 
+#set max speed for footballs
+MAX_SPEED=3.0
+
 #init score
 score=0
 score_font= pygame.font.Font("DragonHunter-9Ynxj.otf", 33)
@@ -128,6 +131,11 @@ while exit_option:
             lives_text = lives_font.render(f'Lives : {lives}', True, (255, 0, 0))
             screen.blit(lives_text, (23, 32))
 
+            #adding a second level of difficulty
+            if score >= 50:
+                MAX_SPEED=20.0
+#               add_football(1)
+
             # continuously shows the updated screen
             pygame.display.flip()
 
@@ -162,6 +170,7 @@ while exit_option:
         pygame.display.flip()
         lives = 3
         score = 0
+        MAX_SPEED=3.0
         remove_footballs()
         add_football(5)
         pygame.mixer.Sound.stop(end_music)
