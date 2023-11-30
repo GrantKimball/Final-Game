@@ -129,7 +129,7 @@ while game:
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_x, mouse_y = pygame.mouse.get_pos()
-                print(mouse_x, mouse_y)
+                #print(mouse_x, mouse_y)
                 if clickable_rect.collidepoint(mouse_x, mouse_y):
                     new_game = False
 
@@ -140,14 +140,18 @@ while game:
     pygame.display.flip()
     lives = 3
     score = 0
+    remove_footballs()
     add_football(5)
+    pygame.mixer.Sound.stop(end_music)
+    pygame.mixer.Sound.play(game_music)
     continue
 
-    #while True:
-    #    for event in pygame.event.get():
-    #        if event.type == pygame.QUIT:
-    #            pygame.quit()
-    #            sys.exit()
+#this isnt doing anything
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
 
 #add a restart option (mouse down function)
 

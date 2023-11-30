@@ -23,3 +23,7 @@ class Football(pygame.sprite.Sprite):
 
 #creates a football group
 footballs=pygame.sprite.Group()
+def remove_footballs():
+    # Kill all sprites in the group
+    footballs.empty()
+
