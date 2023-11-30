@@ -2,7 +2,8 @@ import pygame
 import sys
 from background import draw_background, add_football
 from game_parameters import *
-from player import Player
+from player import Player1
+from player2 import Player2
 from football import *
 
 #initalizing the game
@@ -26,7 +27,8 @@ image.blit(sprite_sheet_image, (0, 0), (0, 0, 64, 64))
 add_football(5)
 
 #creating a player at a certain spot
-player = Player(SCREEN_WIDTH/1.2,SCREEN_HEIGHT/1.2)
+player1 = Player1(SCREEN_WIDTH/1.2,SCREEN_HEIGHT/1.2)
+player2 = Player2(SCREEN_WIDTH/6.1,SCREEN_HEIGHT/1.2)
 
 #init score
 score=0
@@ -56,104 +58,118 @@ pygame.mixer.Sound.play(game_music)
 
 
 #andre helping hand when I do the welcome screen
-game=True
-while game:
-    while running and lives > 0:
-        # lets the player leave when they want
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            player.stop()
-            # allows you to move left and right
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
-                    print('pressed key left')
-                    player.move_left()
-                if event.key == pygame.K_RIGHT:
-                    print('pressed key right')
-                    player.move_right()
-        # continuously blits screen
-        screen.blit(background, (0, 0))
-        # updates player
-        player.update()
-        # updates the footballs position and visibility
-        footballs.update()
+exit_option=True
+while exit_option:
+    game = True
+    while game:
+        while running and lives > 0:
+            # lets the player leave when they want
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                player1.stop1()
+                player2.stop2()
+                # allows you to move left and right
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_LEFT:
+                        print('pressed key left')
+                        player1.move_left1()
+                    if event.key == pygame.K_RIGHT:
+                        print('pressed key right')
+                        player1.move_right1()
+                    if event.key == pygame.K_a:
+                        print('pressed key A')
+                        player2.move_left2()
+                    if event.key == pygame.K_d:
+                        print('pressed key D')
+                        player2.move_right2()
 
-        # check to see if the player touches football
-        result = pygame.sprite.spritecollide(player, footballs, True)
-        if result:
-            pygame.mixer.Sound.play(catch_sound)
-            score += len(result)
-            add_football(len(result))
+            # continuously blits screen
+            screen.blit(background, (0, 0))
+            # updates player
+            player1.update1()
+            player2.update2()
+            # updates the footballs position and visibility
+            footballs.update()
 
-        # check to see if the balls are off the screen
-        for ball in footballs:
-            if ball.rect.y >= SCREEN_HEIGHT:
-                footballs.remove(ball)  # remove football from sprite group
-                pygame.mixer.Sound.play(no_catch)
-                lives = lives - 1
-                add_football(1)
+            # check to see if the player touches football
+            result1 = pygame.sprite.spritecollide(player1, footballs, True)
+            if result1:
+                pygame.mixer.Sound.play(catch_sound)
+                score += len(result1)
+                add_football(len(result1))
 
-        # draw player
-        player.draw(screen)
+            result2 = pygame.sprite.spritecollide(player2, footballs, True)
+            if result2:
+                pygame.mixer.Sound.play(catch_sound)
+                score += len(result2)
+                add_football(len(result2))
 
-        # draw the sprites on the screen(flip ACTUALLY does it but this will tell them where to go)
-        footballs.draw(screen)
+            # check to see if the balls are off the screen
+            for ball in footballs:
+                if ball.rect.y >= SCREEN_HEIGHT:
+                    footballs.remove(ball)  # remove football from sprite group
+                    pygame.mixer.Sound.play(no_catch)
+                    lives = lives - 1
+                    add_football(1)
 
-        # draw/update the score
-        text = score_font.render(f'Score : {score}', True, (255, 0, 0))
-        screen.blit(text, (SCREEN_WIDTH - 178, 32))
+            # draw player
+            player1.draw1(screen)
+            player2.draw2(screen)
 
-        # lives
-        lives_text = lives_font.render(f'Lives : {lives}', True, (255, 0, 0))
-        screen.blit(lives_text, (23, 32))
+            # draw the sprites on the screen(flip ACTUALLY does it but this will tell them where to go)
+            footballs.draw(screen)
 
-        # continuously shows the updated screen
+            # draw/update the score
+            text = score_font.render(f'Score : {score}', True, (255, 0, 0))
+            screen.blit(text, (SCREEN_WIDTH - 178, 32))
+
+            # lives
+            lives_text = lives_font.render(f'Lives : {lives}', True, (255, 0, 0))
+            screen.blit(lives_text, (23, 32))
+
+            # continuously shows the updated screen
+            pygame.display.flip()
+
+            clock.tick(60)
+
+        # after you lose
+
+        # want to play only this music once you lose
+        pygame.mixer.Sound.stop(game_music)
+        pygame.mixer.Sound.play(end_music)
+
+        # display restart option/make rectangle to click
+        restart_text = restart_font.render(f'RESTART', True, (255, 0, 0))
+        screen.blit(restart_text, ((SCREEN_WIDTH / 2) - 160, SCREEN_HEIGHT / 2))
+        clickable_rect = pygame.Rect(200, 150, 600, 350)
         pygame.display.flip()
 
-        clock.tick(60)
+        #this code will allow it to restart or to exit the game
+        new_game = True
+        while new_game:
+            for event in pygame.event.get():
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    mouse_x, mouse_y = pygame.mouse.get_pos()
+                    if clickable_rect.collidepoint(mouse_x, mouse_y):
+                        new_game = False
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
 
-    # after you lose
-
-    # want to play only this music once you lose
-    pygame.mixer.Sound.stop(game_music)
-    pygame.mixer.Sound.play(end_music)
-
-    # display restart option
-    restart_text = restart_font.render(f'RESTART', True, (255, 0, 0))
-    screen.blit(restart_text, ((SCREEN_WIDTH / 2) - 160, SCREEN_HEIGHT / 2))
-    clickable_rect = pygame.Rect(200, 150, 600, 350)
-    pygame.display.flip()
-    new_game = True
-    while new_game:
-        for event in pygame.event.get():
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                mouse_x, mouse_y = pygame.mouse.get_pos()
-                #print(mouse_x, mouse_y)
-                if clickable_rect.collidepoint(mouse_x, mouse_y):
-                    new_game = False
+        # screen.blit(background, (0,0))
+        #update/reset the game
+        pygame.display.flip()
+        lives = 3
+        score = 0
+        remove_footballs()
+        add_football(5)
+        pygame.mixer.Sound.stop(end_music)
+        pygame.mixer.Sound.play(game_music)
+        continue
 
 
 
 
-    # screen.blit(background, (0,0))
-    pygame.display.flip()
-    lives = 3
-    score = 0
-    remove_footballs()
-    add_football(5)
-    pygame.mixer.Sound.stop(end_music)
-    pygame.mixer.Sound.play(game_music)
-    continue
 
-#this isnt doing anything
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-
-#add a restart option (mouse down function)
-
-#pygame.quit()    this would make the game exit out
 
