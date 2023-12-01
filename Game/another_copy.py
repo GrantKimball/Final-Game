@@ -73,6 +73,19 @@ while exit_option:
                 player1.stop1()
                 #player2.stop2()
                 # allows you to move left and right
+                keys = pygame.key.get_pressed()
+                if keys[pygame.K_LEFT] and keys[pygame.K_d]:
+                    player1.move_left1()
+                    player2.move_right2()
+                if keys[pygame.K_RIGHT] and keys[pygame.K_a]:
+                    player1.move_right1()
+                    player2.move_left2()
+                if keys[pygame.K_RIGHT] and keys[pygame.K_d]:
+                    player1.move_right1()
+                    player2.move_right2()
+                if keys[pygame.K_LEFT] and keys[pygame.K_a]:
+                    player1.move_left1()
+                    player2.move_left2()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_LEFT:
                         print('pressed key left')
@@ -182,9 +195,3 @@ while exit_option:
         pygame.mixer.Sound.stop(end_music)
         pygame.mixer.Sound.play(game_music)
         continue
-
-
-
-
-
-
